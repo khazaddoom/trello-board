@@ -1,15 +1,31 @@
-import {useContext} from "react";
-import {TasksContext} from "../App.tsx";
+
+import {allTasksAtom, toDoItems} from "../App.tsx";
 import TaskItem from "./TaskItem.tsx";
+import {useAtom} from "jotai";
+import {atom} from "jotai/index";
+
+const inprogressItems = atom((get) => get(allTasksAtom).filter(item => item.category == "INPROGRESS"));
+const doneItems = atom((get) => get(allTasksAtom).filter(item => item.category == "DONE"));
+export const toDoItems = atom(
+    (get) => get(allTasksAtom).filter(item => item.category == "TODO"),
+    (get, set, newItem:Task) => {
+        const allItems = get(allTasksAtom)
+        set(allTasksAtom, [...allItems, newItem])
+    }
+);
 
 export default  function Swimlanes() {
-    const {allTasks} = useContext(TasksContext)
+
+    const [todos] = useAtom(toDoItems)
+    const [inprogress] = useAtom(inprogressItems)
+    const [done] = useAtom(doneItems)
+
     return <main className="swimlane">
         <section>
             <h1>ToDo</h1>
             <ul>
                 {
-                    allTasks.filter(task => task.category == "TODO").map(task => <li key={task.id}>
+                    todos.map(task => <li key={task.id}>
                         <TaskItem task={task}/>
                     </li>)
                 }
@@ -19,7 +35,7 @@ export default  function Swimlanes() {
         <section>
             <h1>InProgress</h1>
             {
-                allTasks.filter(task => task.category == "INPROGRESS").map(task => <li key={task.id}>
+                inprogress.map(task => <li key={task.id}>
                     <TaskItem task={task}/>
                 </li>)
             }
@@ -27,7 +43,7 @@ export default  function Swimlanes() {
         <section>
             <h1>Done</h1>
             {
-                allTasks.filter(task => task.category == "DONE").map(task => <li key={task.id}>
+                done.map(task => <li key={task.id}>
                     <TaskItem task={task}/>
                 </li>)
             }

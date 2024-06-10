@@ -1,14 +1,22 @@
-import {useContext, useState} from "react";
-import {TasksContext} from "../App.tsx";
+import {useState} from "react";
+import {useAtom} from "jotai";
+import {lastIndexAtom} from "../App.tsx";
+import {toDoItems} from "./Swimlanes.tsx";
 
 export default  function NewTask() {
     const [task, setTask] = useState("")
-    const {addTask} = useContext(TasksContext)
+    const [_, setToDoAtom] = useAtom(toDoItems)
+    const [lastIndex] = useAtom(lastIndexAtom)
+
     return <form onSubmit={e => {
         e.preventDefault()
         if(!task) return
         // update global state
-        addTask(task)
+        setToDoAtom({
+            id: lastIndex,
+            category: "TODO",
+            task
+        })
         setTask("")
     }}>
         <input type="text" name="newtask" id="newTaskId" value={task} onChange={e => setTask(e.target.value)}/>

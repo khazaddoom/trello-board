@@ -1,15 +1,7 @@
+import {atom, useAtom} from 'jotai'
 import NewTask from "./components/NewTask.tsx";
-import {createContext, useEffect, useState} from "react";
 import Swimlanes from "./components/Swimlanes.tsx";
 
-export const TasksContext = createContext<{
-    allTasks: Task[],
-    getTasks?: (category?: string) => Task[],
-    addTask?: (task: string) => void,
-    advanceTask: (taskId: number) => void
-}>({
-    allTasks: []
-})
 
 type Task = {
     id: number;
@@ -17,71 +9,24 @@ type Task = {
     task: string
 }
 
-let taskIndex = 1;
+export const allTasksAtom = atom<Task[]>([])
 
-function TasksWrapper({children}) {
+export const updateTaskAtom = atom(null, (get, set, task:Task) => {
+    const restItems = get(allTasksAtom).filter(item => item.id != task.id)
+    set(allTasksAtom, [...restItems, {...task}])
+})
 
-    const [allTasks, updateTasks] = useState<Task[]>([])
-
-    useEffect(() => {
-        console.log(allTasks)
-    }, [allTasks])
-
-    const getTasks = (category?: string) => {
-        if(category)
-            return allTasks.filter(task => task.category == category);
-        else
-            return allTasks;
-    }
-
-    const addTask = (task: string) => {
-        updateTasks(prevTasks => ([...prevTasks, {
-            id: taskIndex++,
-            category: "TODO",
-            task
-        }]))
-    }
-
-    const advanceTask = (taskId: number) => {
-        console.log(taskId)
-        const oldTask = allTasks.find(task => task.id == taskId)
-        console.log(oldTask)
-        if(oldTask) {
-            let category = "TODO"
-            if(oldTask.category == "TODO") {
-                category = "INPROGRESS"
-            }
-            else if(oldTask.category == "INPROGRESS"){
-                category = "DONE"
-            }
-            else {
-                category = "TODO";
-            }
-
-            updateTasks(prevState => {
-                prevState = prevState.filter(task => task.id != taskId)
-                return [...prevState, {...oldTask, category}]
-            })
-        }
-    }
-
-
-    return <TasksContext.Provider value={{
-        allTasks,
-        getTasks,
-        addTask,
-        advanceTask
-    }}>
-        {children}
-    </TasksContext.Provider>
-}
+export const lastIndexAtom = atom((get) => {
+    const all = get(allTasksAtom)
+    return all.length
+})
 
 function App() {
   return (
-    <TasksWrapper>
+    <>
         <NewTask />
         <Swimlanes />
-    </TasksWrapper>
+    </>
   )
 }
 
