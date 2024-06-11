@@ -1,10 +1,14 @@
 import {useSetAtom} from "jotai";
-import {updateTaskAtom} from "../App.tsx";
+import {Task, updateTaskAtom} from "../App.tsx";
 
-export default  function TaskItem({task}) {
+type TaskItemProps = {
+    task: Task
+}
+
+export default  function TaskItem({task}: TaskItemProps) {
     const setter = useSetAtom(updateTaskAtom)
     return <h3 onClick={() => {
-        let category = "TODO"
+        let category:Task["category"] = "TODO"
         if(task.category == "TODO") {
             category = "INPROGRESS"
         }
