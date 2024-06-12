@@ -1,5 +1,8 @@
+import { PropsWithChildren } from "react"
 
-export default function Board({children}) {
+type BoardProps = PropsWithChildren & {}
+
+export default function Board({children}: BoardProps) {
     return <section className="column">
         {children}
     </section>
