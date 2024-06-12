@@ -7,7 +7,7 @@ type TaskItemProps = {
 
 export default  function TaskItem({task}: TaskItemProps) {
     const setter = useSetAtom(updateTaskAtom)
-    return <h3 className="taskItem" onClick={() => {
+    return <div className="taskItem" onClick={() => {
         let category:Task["category"] = "TODO"
         if(task.category == "TODO") {
             category = "INPROGRESS"
@@ -19,5 +19,11 @@ export default  function TaskItem({task}: TaskItemProps) {
             category = "TODO";
         }
         setter({...task, category: category})
-    }}>{task.task}</h3>
+    }}>
+        <div className="texts">
+            <h3 className="title">{task.task}</h3>
+            <h3 className="subtitle">{task.task}</h3>
+        </div>
+        <div className="tag tag-low">LOW</div>
+    </div>
 }

@@ -21,7 +21,7 @@ export default  function Swimlanes() {
         </Board>
         <Board>
             <div className="header">
-                <h3 className="header-title">In progress</h3>
+                <h3 className="header-title">In Progress</h3>
             </div>
             <ul className="tasks">
                     {inprogress.map(task => <TaskItem task={{...task}}/>)}
