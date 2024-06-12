@@ -1,5 +1,6 @@
 
 import {doneItems, inprogressItems, toDoItems} from "../App.tsx";
+import Board from "./Board.tsx";
 import TaskItem from "./TaskItem.tsx";
 import {useAtom} from "jotai";
 
@@ -10,32 +11,29 @@ export default  function Swimlanes() {
     const [done] = useAtom(doneItems)
 
     return <main className="swimlane">
-        <section>
-            <h1>ToDo</h1>
-            <ul>
-                {
-                    todos.map(task => <li key={task.id}>
-                        <TaskItem task={task}/>
-                    </li>)
-                }
+        <Board>
+            <div className="header">
+                <h3 className="header-title">To Do</h3>
+            </div>
+            <ul className="tasks">
+                {todos.map(task => <TaskItem task={{...task}}/>)}
             </ul>
-
-        </section>
-        <section>
-            <h1>InProgress</h1>
-            {
-                inprogress.map(task => <li key={task.id}>
-                    <TaskItem task={task}/>
-                </li>)
-            }
-        </section>
-        <section>
-            <h1>Done</h1>
-            {
-                done.map(task => <li key={task.id}>
-                    <TaskItem task={task}/>
-                </li>)
-            }
-        </section>
+        </Board>
+        <Board>
+            <div className="header">
+                <h3 className="header-title">In progress</h3>
+            </div>
+            <ul className="tasks">
+                    {inprogress.map(task => <TaskItem task={{...task}}/>)}
+            </ul>
+        </Board>
+        <Board>
+            <div className="header">
+                <h3 className="header-title">Done</h3>
+            </div>
+            <ul className="tasks">
+                {done.map(task => <TaskItem task={{...task}}/>)}
+            </ul>
+        </Board>
     </main>
 }

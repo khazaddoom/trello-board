@@ -7,7 +7,7 @@ type TaskItemProps = {
 
 export default  function TaskItem({task}: TaskItemProps) {
     const setter = useSetAtom(updateTaskAtom)
-    return <h3 onClick={() => {
+    return <h3 className="taskItem" onClick={() => {
         let category:Task["category"] = "TODO"
         if(task.category == "TODO") {
             category = "INPROGRESS"
