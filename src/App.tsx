@@ -1,6 +1,7 @@
-import {atom} from 'jotai'
+import {atom, useAtom} from 'jotai'
 import NewTask from "./components/NewTask.tsx";
 import Swimlanes from "./components/Swimlanes.tsx";
+import {useEffect} from "react";
 
 
 export type Task = {
@@ -9,7 +10,11 @@ export type Task = {
     task: string
 }
 
-export const allTasksAtom = atom<Task[]>([])
+export const allTasksAtom = atom<Task[]>([{
+    id: 1,
+    category: "INPROGRESS",
+    task: "Write Code"
+}])
 
 export const inprogressItems = atom((get) => get(allTasksAtom).filter(item => item.category == "INPROGRESS"));
 export const doneItems = atom((get) => get(allTasksAtom).filter(item => item.category == "DONE"));
@@ -32,6 +37,8 @@ export const lastIndexAtom = atom((get) => {
 })
 
 function App() {
+    const allTasks = useAtom(allTasksAtom)
+    console.log(allTasks)
   return (
     <>
         <NewTask />

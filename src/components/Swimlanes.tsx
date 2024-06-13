@@ -11,7 +11,7 @@ export default  function Swimlanes() {
     const [done] = useAtom(doneItems)
 
     return <main className="swimlane">
-        <Board>
+        <Board id="TODO">
             <div className="header">
                 <h3 className="header-title">To Do</h3>
             </div>
@@ -19,7 +19,7 @@ export default  function Swimlanes() {
                 {todos.map(task => <TaskItem task={{...task}}/>)}
             </ul>
         </Board>
-        <Board>
+        <Board id="INPROGRESS">
             <div className="header">
                 <h3 className="header-title">In Progress</h3>
             </div>
@@ -27,7 +27,7 @@ export default  function Swimlanes() {
                     {inprogress.map(task => <TaskItem task={{...task}}/>)}
             </ul>
         </Board>
-        <Board>
+        <Board id="DONE">
             <div className="header">
                 <h3 className="header-title">Done</h3>
             </div>
