@@ -1,5 +1,5 @@
 import NewTask from "./components/NewTask.tsx";
-import {createContext, useEffect, useState} from "react";
+import {createContext, PropsWithChildren, useEffect, useState} from "react";
 import Swimlanes from "./components/Swimlanes.tsx";
 
 export const TasksContext = createContext<{
@@ -8,7 +8,10 @@ export const TasksContext = createContext<{
     addTask?: (task: string) => void,
     advanceTask: (taskId: number) => void
 }>({
-    allTasks: []
+    allTasks: [],
+    getTasks: () => [],
+    addTask: () => {},
+    advanceTask: () => {}
 })
 
 type Task = {
@@ -19,7 +22,7 @@ type Task = {
 
 let taskIndex = 1;
 
-function TasksWrapper({children}) {
+function TasksWrapper({children}: PropsWithChildren) {
 
     const [allTasks, updateTasks] = useState<Task[]>([])
 
@@ -47,7 +50,7 @@ function TasksWrapper({children}) {
         const oldTask = allTasks.find(task => task.id == taskId)
         console.log(oldTask)
         if(oldTask) {
-            let category = "TODO"
+            let category:Task["category"] = "TODO"
             if(oldTask.category == "TODO") {
                 category = "INPROGRESS"
             }
@@ -58,7 +61,7 @@ function TasksWrapper({children}) {
                 category = "TODO";
             }
 
-            updateTasks(prevState => {
+            updateTasks((prevState) => {
                 prevState = prevState.filter(task => task.id != taskId)
                 return [...prevState, {...oldTask, category}]
             })
